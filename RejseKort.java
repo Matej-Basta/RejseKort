@@ -29,6 +29,7 @@ public class RejseKort {
     }
 
     public boolean isCheckedIn(int timeStamp) {
+        
         if (checkedIn && lastCheckIn + 120 >= timeStamp) {
             return true;
         }
@@ -37,15 +38,24 @@ public class RejseKort {
 
     public void checkIn(int x, int y, int timeStamp) {
         
+        if (balance < 100) {
+            System.out.println("Not enough money in account to check in. Please deposit at least " + (100 - balance) + " DKK");
+            return;
+        }
+        
         if (x > coordinates.get("maxX")) {
             coordinates.put("maxX", x);
-        } else if (x < coordinates.get("minX")) {
+        } 
+        
+        if (x < coordinates.get("minX")) {
             coordinates.put("minX", x);
         }
 
         if (y > coordinates.get("maxY")) {
             coordinates.put("maxY", y);
-        } else if (y < coordinates.get("minY")) {
+        }
+        
+        if (y < coordinates.get("minY")) {
             coordinates.put("minY", y);
         }
         
@@ -54,7 +64,7 @@ public class RejseKort {
             lastCheckIn = timeStamp;
             System.out.println("Checked in");
         } else {
-            System.out.println("Continued journey (" + (timeStamp - lastCheckIn) + " minutes since the last check in)");
+            System.out.println("Continued journey (" + (timeStamp - lastCheckIn) + " minutes since last check in)");
             lastCheckIn = timeStamp;
         }
     }
@@ -64,6 +74,22 @@ public class RejseKort {
         if (!checkedIn) {
             System.out.println("Error: Cannot check out; Not currently checked in"); //might need to checkout automatically, when there is more time than 120 mins from last checkin
             return;
+        }
+
+        if (x > coordinates.get("maxX")) {
+            coordinates.put("maxX", x);
+        } 
+        
+        if (x < coordinates.get("minX")) {
+            coordinates.put("minX", x);
+        }
+
+        if (y > coordinates.get("maxY")) {
+            coordinates.put("maxY", y);
+        }
+        
+        if (y < coordinates.get("minY")) {
+            coordinates.put("minY", y);
         }
 
         checkedIn = false;
@@ -80,7 +106,7 @@ public class RejseKort {
         }
         
         balance -= finalPrice;
-        System.out.println("Checked out! " + (timeStamp - lastCheckIn) + " minutes since the last check in. Price is " + finalPrice + " DKK, remaining balance is " + balance + " DKK");
+        System.out.println("Checked out! " + (timeStamp - lastCheckIn) + " minutes since last check in. Price is " + finalPrice + " DKK, remaining balance is " + balance + " DKK");
     }
 
 }
